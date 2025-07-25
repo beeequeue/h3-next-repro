@@ -1,0 +1,92 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+
+      - run: corepack enable
+
+      - name: find pnpm cache path
+        id: cache
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+        with:
+          path: ${{ steps.cache.outputs.path }}
+          key: v1-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            v1-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+
+      - run: corepack enable
+
+      - name: find pnpm cache path
+        id: cache
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+        with:
+          path: ${{ steps.cache.outputs.path }}
+          key: v1-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            v1-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm typecheck
+
+  repro:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+
+      - run: corepack enable
+
+      - name: find pnpm cache path
+        id: cache
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+        with:
+          path: ${{ steps.cache.outputs.path }}
+          key: v1-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            v1-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm test

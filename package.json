@@ -1,0 +1,48 @@
+{
+  "name": "h3-next-repro",
+  "type": "module",
+  "private": true,
+  "version": "0.0.0",
+  "author": "BeeeQueue <adam@haglund.dev>",
+  "license": "MIT",
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": "^24"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
+  },
+  "nano-staged": {
+    "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,json5,yaml,yml,css,scss,md}": [
+      "prettier --write"
+    ]
+  },
+  "simple-git-hooks": {
+    "pre-commit": "./node_modules/.bin/nano-staged"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "eslint",
+    "test": "node --test",
+    "typecheck": "tsc --noEmit --project tsconfig.json",
+    "prepare": "simple-git-hooks"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "5.0.0",
+    "@tsconfig/node24": "24.0.1",
+    "@tsconfig/strictest": "2.0.5",
+    "@types/node": "24.1.0",
+    "eslint": "9.32.0",
+    "h3": "2.0.0-beta.1",
+    "nano-staged": "0.8.0",
+    "prettier": "3.6.2",
+    "simple-git-hooks": "2.13.0",
+    "typescript": "5.8.3"
+  }
+}
